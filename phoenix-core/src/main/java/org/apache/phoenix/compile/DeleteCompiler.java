@@ -102,7 +102,7 @@ public class DeleteCompiler {
         byte[] tenantIdBytes = null;
         if (tenantId != null) {
             tenantId = ScanUtil.padTenantIdIfNecessary(table.getRowKeySchema(), table.getBucketNum() != null, tenantId);
-            tenantIdBytes = tenantId.getBytes();
+            tenantIdBytes = ScanUtil.getTenantIdBytes(table.getRowKeySchema(), table.getBucketNum() != null, tenantId);
         }
         final boolean isAutoCommit = connection.getAutoCommit();
         ConnectionQueryServices services = connection.getQueryServices();
