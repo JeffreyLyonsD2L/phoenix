@@ -652,6 +652,16 @@ public class ScanUtil {
         return tenantId;
     }
 
+    public static byte[] getTenantIdBytes(RowKeySchema schema, boolean isSalted, PName tenantId) {
+        int pkPos = isSalted ? 1 : 0;
+        Field field = schema.getField(pkPos);
+        PDataType dataType = field.getDataType();
+        Object value = dataType.toObject(tenantId.getString());
+        byte[] convertedValue = dataType.toBytes(value);
+        //TODO: return error on failure here
+        return convertedValue;
+    }
+
     public static Iterator<Filter> getFilterIterator(Scan scan) {
         Iterator<Filter> filterIterator;
         Filter topLevelFilter = scan.getFilter();

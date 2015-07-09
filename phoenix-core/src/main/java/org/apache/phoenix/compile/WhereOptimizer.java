@@ -106,6 +106,7 @@ public class WhereOptimizer {
     public static Expression pushKeyExpressionsToScan(StatementContext context, FilterableStatement statement,
             Expression whereClause, Set<Expression> extractNodes) {
         PName tenantId = context.getConnection().getTenantId();
+        byte[] tenantIdBytes = null;
         PTable table = context.getCurrentTable().getTable();
     	Integer nBuckets = table.getBucketNum();
     	boolean isSalted = nBuckets != null;
@@ -113,6 +114,7 @@ public class WhereOptimizer {
     	boolean isMultiTenant = tenantId != null && table.isMultiTenant();
     	if (isMultiTenant) {
     		tenantId = ScanUtil.padTenantIdIfNecessary(schema, isSalted, tenantId);
+            tenantIdBytes = ScanUtil.getTenantIdBytes(schema, isSalted, tenantId);
     	}
 
         if (whereClause == null && (tenantId == null || !table.isMultiTenant()) && table.getViewIndexId() == null) {
@@ -166,7 +168,7 @@ public class WhereOptimizer {
         boolean hasViewIndex = table.getViewIndexId() != null;
         if (hasMinMaxRange) {
             int minMaxRangeSize = (isSalted ? SaltingUtil.NUM_SALTING_BYTES : 0)
-                    + (isMultiTenant ? tenantId.getBytes().length + 1 : 0) 
+                    + (isMultiTenant ? tenantIdBytes.length + 1 : 0)
                     + (hasViewIndex ? MetaDataUtil.getViewIndexIdDataType().getByteSize() : 0);
             minMaxRangePrefix = new byte[minMaxRangeSize];
         }
@@ -187,7 +189,6 @@ public class WhereOptimizer {
         
         // Add tenant data isolation for tenant-specific tables
         if (isMultiTenant) {
-            byte[] tenantIdBytes = tenantId.getBytes();
             KeyRange tenantIdKeyRange = KeyRange.getKeyRange(tenantIdBytes);
             cnf.add(singletonList(tenantIdKeyRange));
             if (hasMinMaxRange) {

@@ -1421,7 +1421,7 @@ public class MetaDataClient {
             String tableName = tableNameNode.getTableName();
             String parentTableName = null;
             PName tenantId = connection.getTenantId();
-            String tenantIdStr = tenantId == null ? null : connection.getTenantId().getString();
+            String tenantIdStr = tenantId == null ? null : tenantId.getString();
             boolean multiTenant = false;
             boolean storeNulls = false;
             Integer saltBucketNum = null;
@@ -1454,7 +1454,7 @@ public class MetaDataClient {
                 parentTableName = parent.getTableName().getString();
                 // Pass through data table sequence number so we can check it hasn't changed
                 PreparedStatement incrementStatement = connection.prepareStatement(INCREMENT_SEQ_NUM);
-                incrementStatement.setString(1, connection.getTenantId() == null ? null : connection.getTenantId().getString());
+                incrementStatement.setString(1, tenantIdStr);
                 incrementStatement.setString(2, schemaName);
                 incrementStatement.setString(3, parentTableName);
                 incrementStatement.setLong(4, parent.getSequenceNumber());
@@ -1466,7 +1466,7 @@ public class MetaDataClient {
 
                 // Add row linking from data table row to index table row
                 PreparedStatement linkStatement = connection.prepareStatement(CREATE_LINK);
-                linkStatement.setString(1, connection.getTenantId() == null ? null : connection.getTenantId().getString());
+                linkStatement.setString(1, tenantIdStr);
                 linkStatement.setString(2, schemaName);
                 linkStatement.setString(3, parentTableName);
                 linkStatement.setString(4, tableName);
@@ -1596,7 +1596,7 @@ public class MetaDataClient {
                     // FIXME: not currently used, but see PHOENIX-1367
                     // as fixing that will require it's usage.
                     PreparedStatement linkStatement = connection.prepareStatement(CREATE_VIEW_LINK);
-                    linkStatement.setString(1, connection.getTenantId() == null ? null : connection.getTenantId().getString());
+                    linkStatement.setString(1, tenantIdStr);
                     linkStatement.setString(2, schemaName);
                     linkStatement.setString(3, tableName);
                     linkStatement.setString(4, parent.getName().getString());
@@ -1619,7 +1619,7 @@ public class MetaDataClient {
                     // Add row linking from data table row to physical table row
                     PreparedStatement linkStatement = connection.prepareStatement(CREATE_LINK);
                     for (PName physicalName : physicalNames) {
-                        linkStatement.setString(1, connection.getTenantId() == null ? null : connection.getTenantId().getString());
+                        linkStatement.setString(1, tenantIdStr);
                         linkStatement.setString(2, schemaName);
                         linkStatement.setString(3, tableName);
                         linkStatement.setString(4, physicalName.getString());
