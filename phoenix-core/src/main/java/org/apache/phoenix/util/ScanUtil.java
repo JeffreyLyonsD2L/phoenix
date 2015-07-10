@@ -45,6 +45,8 @@ import org.apache.phoenix.compile.ScanRanges;
 import org.apache.phoenix.compile.StatementContext;
 import org.apache.phoenix.coprocessor.BaseScannerRegionObserver;
 import org.apache.phoenix.coprocessor.MetaDataProtocol;
+import org.apache.phoenix.exception.SQLExceptionCode;
+import org.apache.phoenix.exception.SQLExceptionInfo;
 import org.apache.phoenix.filter.BooleanExpressionFilter;
 import org.apache.phoenix.filter.SkipScanFilter;
 import org.apache.phoenix.query.KeyRange;
@@ -52,6 +54,7 @@ import org.apache.phoenix.query.KeyRange.Bound;
 import org.apache.phoenix.query.QueryConstants;
 import org.apache.phoenix.query.QueryServices;
 import org.apache.phoenix.query.QueryServicesOptions;
+import org.apache.phoenix.schema.IllegalDataException;
 import org.apache.phoenix.schema.PName;
 import org.apache.phoenix.schema.PNameFactory;
 import org.apache.phoenix.schema.RowKeySchema;
@@ -652,13 +655,19 @@ public class ScanUtil {
         return tenantId;
     }
 
-    public static byte[] getTenantIdBytes(RowKeySchema schema, boolean isSalted, PName tenantId) {
+    public static byte[] getTenantIdBytes(RowKeySchema schema, boolean isSalted, PName tenantId)
+            throws SQLException {
         int pkPos = isSalted ? 1 : 0;
         Field field = schema.getField(pkPos);
         PDataType dataType = field.getDataType();
-        Object value = dataType.toObject(tenantId.getString());
-        byte[] convertedValue = dataType.toBytes(value);
-        //TODO: return error on failure here
+        byte[] convertedValue;
+        try {
+            Object value = dataType.toObject(tenantId.getString());
+            convertedValue = dataType.toBytes(value);
+        } catch(IllegalDataException ex) {
+            throw new SQLExceptionInfo.Builder(SQLExceptionCode.TENANTID_IS_OF_WRONG_TYPE)
+                    .build().buildException();
+        }
         return convertedValue;
     }
 
