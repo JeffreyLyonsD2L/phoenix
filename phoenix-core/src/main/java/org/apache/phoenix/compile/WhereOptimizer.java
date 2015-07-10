@@ -98,13 +98,14 @@ public class WhereOptimizer {
      * @param whereClause the where clause expression
      * @return the new where clause with the key expressions removed
      */
-    public static Expression pushKeyExpressionsToScan(StatementContext context, FilterableStatement statement, Expression whereClause) {
+    public static Expression pushKeyExpressionsToScan(StatementContext context, FilterableStatement statement, Expression whereClause)
+            throws SQLException{
         return pushKeyExpressionsToScan(context, statement, whereClause, null);
     }
 
     // For testing so that the extractedNodes can be verified
     public static Expression pushKeyExpressionsToScan(StatementContext context, FilterableStatement statement,
-            Expression whereClause, Set<Expression> extractNodes) {
+            Expression whereClause, Set<Expression> extractNodes) throws SQLException {
         PName tenantId = context.getConnection().getTenantId();
         byte[] tenantIdBytes = null;
         PTable table = context.getCurrentTable().getTable();
