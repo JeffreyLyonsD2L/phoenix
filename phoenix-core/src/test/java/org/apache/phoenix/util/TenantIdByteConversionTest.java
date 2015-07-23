@@ -25,6 +25,14 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
+<<<<<<< HEAD
+=======
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.phoenix.query.KeyRange;
+import org.apache.phoenix.query.KeyRange.Bound;
+import org.apache.phoenix.query.QueryConstants;
+>>>>>>> Adding unit tests for new method in ScanUtil.
 import org.apache.phoenix.schema.*;
 import org.apache.phoenix.schema.types.*;
 import org.apache.phoenix.schema.RowKeySchema.RowKeySchemaBuilder;
@@ -33,6 +41,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+<<<<<<< HEAD
+=======
+import com.google.common.base.Function;
+>>>>>>> Adding unit tests for new method in ScanUtil.
 import com.google.common.collect.Lists;
 import org.mockito.Mockito;
 
