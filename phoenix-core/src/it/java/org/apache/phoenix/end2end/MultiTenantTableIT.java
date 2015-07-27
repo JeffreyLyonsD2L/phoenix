@@ -18,6 +18,7 @@
 package org.apache.phoenix.end2end;
 
 import static org.apache.phoenix.util.TestUtil.TEST_PROPERTIES;
+import static org.apache.phoenix.util.TestUtil.substr;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -65,7 +66,11 @@ public class MultiTenantTableIT extends BaseClientManagedTimeIT {
         this.dataType = dataType;
         this.tenantId = tenantId;
         this.otherTenantId = otherTenantId;
-        this.table = "foo" + dataType;
+        String tbl = "foo" + dataType;
+        if(tbl.contains("(")){
+            tbl = tbl.substring(0, tbl.indexOf("("));
+        }
+        this.table = tbl;
         this.ddl = "create table " + table + " (" + "tid "+ dataType + " NOT NULL," + "id INTEGER NOT NULL, \n"
                 + "val VARCHAR " + "CONSTRAINT pk PRIMARY KEY(tid, id)) \n"
                 + "MULTI_TENANT=true";
@@ -88,6 +93,7 @@ public class MultiTenantTableIT extends BaseClientManagedTimeIT {
         testCases.add(new Object[] { "UNSIGNED_DOUBLE", "1.7976931348623157", "1.7976931348623156" });
         testCases.add(new Object[] { "DECIMAL", "3.402823466", "3.402823465" });
         testCases.add(new Object[] { "VARCHAR", "\'NameOfTenant\'", "\'Nemesis\'" });
+        testCases.add(new Object[] { "CHAR(10)", "\'1234567890\'", "\'Nemesis\'" });
 
         return testCases;
     }
@@ -131,7 +137,7 @@ public class MultiTenantTableIT extends BaseClientManagedTimeIT {
             assertEquals(SQLExceptionCode.COLUMN_NOT_FOUND.getErrorCode(), ex.getErrorCode());
         }
 
-        conn.createStatement().execute("DROP TABLE foo" + dataType);
+        conn.createStatement().execute("DROP TABLE " + table);
     }
 
 }
