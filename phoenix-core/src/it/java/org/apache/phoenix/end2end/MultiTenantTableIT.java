@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 package org.apache.phoenix.end2end;
-import static org.apache.phoenix.util.TestUtil.TEST_PROPERTIES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -31,10 +30,7 @@ import com.google.common.collect.Lists;
 import org.apache.phoenix.exception.SQLExceptionCode;
 import org.apache.phoenix.schema.TableAlreadyExistsException;
 import org.apache.phoenix.util.PhoenixRuntime;
-<<<<<<< HEAD
-=======
-import org.apache.phoenix.util.PropertiesUtil;
->>>>>>> Rounding out integration tests.
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
