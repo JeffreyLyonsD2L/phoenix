@@ -417,7 +417,7 @@ public class MutationState implements SQLCloseable {
                                         table.getRowKeySchema(),
                                         table.getBucketNum()!=null,
                                         tenantId);
-                                    mutation.setAttribute(PhoenixRuntime.TENANT_ID_ATTRIB, tenantId);
+                                    mutation.setAttribute(PhoenixRuntime.TENANT_ID_ATTRIB, tenantIdBytes);
                                 }
                                 mutation.setAttribute(PhoenixIndexCodec.INDEX_UUID, uuidValue);
                                 if (attribValue != null) {

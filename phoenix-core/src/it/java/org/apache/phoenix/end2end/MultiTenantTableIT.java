@@ -15,12 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-<<<<<<< HEAD
 package org.apache.phoenix.end2end;
-=======
-package org.apache.phoenix.end2end;
-
->>>>>>> 35c99092b7df8fc891e04f1d2daac1db91076d23
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -35,10 +30,6 @@ import com.google.common.collect.Lists;
 import org.apache.phoenix.exception.SQLExceptionCode;
 import org.apache.phoenix.schema.TableAlreadyExistsException;
 import org.apache.phoenix.util.PhoenixRuntime;
-<<<<<<< HEAD
-
-=======
->>>>>>> 35c99092b7df8fc891e04f1d2daac1db91076d23
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -76,10 +67,6 @@ public class MultiTenantTableIT extends BaseClientManagedTimeIT {
             tbl = tbl.substring(0, tbl.indexOf("("));
         }
         this.table = tbl;
-<<<<<<< HEAD
-
-=======
->>>>>>> 35c99092b7df8fc891e04f1d2daac1db91076d23
         this.ddl = "create table " + table + " (" + "tid "+ dataType + " NOT NULL," + "id INTEGER NOT NULL, \n"
                 + "val VARCHAR " + "CONSTRAINT pk PRIMARY KEY(tid, id)) \n"
                 + "MULTI_TENANT=true";
@@ -145,12 +132,7 @@ public class MultiTenantTableIT extends BaseClientManagedTimeIT {
         } catch (SQLException ex) {
             assertEquals(SQLExceptionCode.COLUMN_NOT_FOUND.getErrorCode(), ex.getErrorCode());
         }
-
-<<<<<<< HEAD
         conn.createStatement().execute("DROP TABLE " + table);
-=======
-        conn.createStatement().execute("DROP TABLE " + table);
->>>>>>> 35c99092b7df8fc891e04f1d2daac1db91076d23
     }
 
 }
