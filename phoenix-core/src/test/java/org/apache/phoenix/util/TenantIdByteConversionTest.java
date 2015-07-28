@@ -25,11 +25,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.phoenix.query.KeyRange;
-import org.apache.phoenix.query.KeyRange.Bound;
-import org.apache.phoenix.query.QueryConstants;
 import org.apache.phoenix.schema.*;
 import org.apache.phoenix.schema.types.*;
 import org.apache.phoenix.schema.RowKeySchema.RowKeySchemaBuilder;
@@ -38,7 +33,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.mockito.Mockito;
 
