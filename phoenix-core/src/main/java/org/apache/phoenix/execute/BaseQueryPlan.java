@@ -205,7 +205,6 @@ public abstract class BaseQueryPlan implements QueryPlan {
             ScanUtil.setTimeRange(scan, context.getScanTimeRange());
         }
         byte[] tenantIdBytes;
-        PTable table = context.getCurrentTable().getTable();
         if( table.isMultiTenant() == true ) {
             tenantIdBytes = connection.getTenantId() == null ? null :
                     ScanUtil.getTenantIdBytes(
